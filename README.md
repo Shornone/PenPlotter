@@ -7,6 +7,8 @@ First I decided to use the repetier 3d printer control firmware https://github.c
 
 Next I wrote a simpler version of the controller that speaks gcode and uses mm units. Here is a list of some of the features of the controller.
 
+Solenoid or servo can be used. Solenoid are connected to FAN pins.
+
 # Features
 - Supports Gcode files (.gcode, .cnc, .nc, .g, .gco)
   - Standard Gcodes G0, G1, G2, G3 are supported for movement.
@@ -52,6 +54,8 @@ The controller can be compiled in processing 2 or 3 just download the source fil
 The code is dependent of the controlP5, geomerative and toxi libraries go to the processing sketch import library menu to import them before compiling, or they can be added manually by downloading the libraries.zip file from the releases tab and unziping in the processing libraries directory.
 
 The firmware is compiled using the arduino IDE. Download the code and load the Repitier.ino into arduino. I have only tested with the mega board with the ramps 1.4 shield. However repetier works with many boards so you may need to change the board type in the configuration.h file if you are using a different board.
+
+*WARNING* The X axis pins were chaged in the Marlin pins.h file to use the E1 port this was for compatibility with the original pen plotter pins. So you need to connect the X axis motor to the E1 port or change the pins back in the pins.h file line 596-616 remove the pin numbers to leave the original commented pins.
 
 *WARNING* I changed the X Y and ZAXIS_STEPS_PER_MM defines in the configuragion.h to 1mm as I do my own mm to polar conversion based on the machine specs described above so make sure if you change boards the setting remains at 1.
 

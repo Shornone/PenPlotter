@@ -110,6 +110,7 @@ import java.awt.BorderLayout;
     boolean overTop = false;
     boolean overBottom = false;
     boolean motorsOn = false;
+    boolean draw = true;
 
 
     int pageColor = color(255, 255, 255);
@@ -159,6 +160,8 @@ import java.awt.BorderLayout;
     long lastTime = millis();
     long freeMemory;
     long totalMemory;
+    boolean useSolenoid = false; //If used solinoid as lifting pen
+    int solenoidUP = 1;//Solinoid on or off when UP 
     int servoDwell = 250;
     int servoUpValue = 2350;
     int servoDownValue = 1500;
@@ -205,7 +208,7 @@ import java.awt.BorderLayout;
 
     public void setup() {
 
-        size(840, 650, JAVA2D);
+        size(840, 680, JAVA2D);
         //surface.setResizable(true);
         frame.setResizable(true);
         changeAppIcon( loadImage(ICON) );
@@ -372,6 +375,18 @@ import java.awt.BorderLayout;
            println("control");
            initLogging();
          }
+         
+         if (key == 'd')
+         {
+           println("draw");
+           draw = true;
+         }
+         if (key == 'n')
+         {
+           println("no draw");
+           draw = false;
+         }        
+         
     }
 void initLogging()
 {
@@ -581,34 +596,39 @@ void initLogging()
     public void draw()
     {
         background(backgroundColor);
+        // I put the if(draw) arround all the drawing routines see if just placing it around the drawing of the image 
+        // below is enough
+        if(draw)
+        {
 
-        drawPage();
-        drawOrigin();
-        drawTicks(); 
-        drawPaper();
 
-        for (Handle handle : handles) {
-            handle.update();
-            handle.display();
-        }
+          drawPage();
+          drawOrigin();
+          drawTicks(); 
+          drawPaper();
+
+          for (Handle handle : handles) {
+              handle.update();
+              handle.display();
+          }
         
-        if (currentPlot.isLoaded())
-        {
-            currentPlot.draw();
-        }
+          if (currentPlot.isLoaded())
+          {
+              currentPlot.draw();
+          }
       
-        drawGondola();
+          drawGondola();
 
 
-
-        if (oimg != null)
-        {
+          // try just skipping the image draw here
+          if (oimg != null)
+          {
             image(oimg, imageX, imageY, imageWidth, imageHeight);
             drawImageFrame();
             drawSelector();
+          }
+
         }
-
-
 
         if (jogX != 0)
         {
@@ -637,7 +657,7 @@ void initLogging()
         status += " B: "+nf(getMachineB(currentX, currentY), 0, 2);
         if(currentPlot.isLoaded())
           status += " Plot: "+currentPlot.progress();
-        text(status, 150, height-4);
+        text(status, 160, height-4);
     }
 
     public void drawGondola()
